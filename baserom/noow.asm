@@ -207,6 +207,11 @@ STZ $13CE|!addr;this fixes some various stuff, like midways carrying over betwee
 STZ $13C6|!addr;and Mario stopping moving during the victory marsh after a boss
 STZ $13D2|!addr
 +
+; randomdude999: do a bunch of counterbreaking
+STZ $19 ; clear powerup
+STZ $0DC2|!addr ; clear itembox
+STZ $187A|!addr ; clear yoshi
+STZ $0DC1|!addr ; i don't even know anymore (yoshi related)
 STZ $0F
 LDX $0100|!addr
 CPX #$03
