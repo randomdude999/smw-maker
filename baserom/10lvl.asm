@@ -27,6 +27,3 @@ HexDec:
     BRA -
 +   RTS
     warnpc $8FC5
-
-
-; The level number itself is written using UberASM.
