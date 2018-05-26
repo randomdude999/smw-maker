@@ -1,7 +1,10 @@
 
 incsrc "sa1detect.asm"
-incsrc "deathcount.asm"
+namespace hexEdits
 incsrc "hex_edits.asm"
+namespace deathcounter
+incsrc "deathcount.asm"
+namespace _1lvl
 
 ; One file, one player
 org $009CBB ;\ I guess this is the 1 file part?
