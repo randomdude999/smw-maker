@@ -24,7 +24,6 @@ org $008C89     ; Status bar text
 
 freecode
 SBDisplay:
-print "SBDisplay ",pc
     LDX #$04
   - LDA !deathcounter,x
     STA $0F15|!addr,x

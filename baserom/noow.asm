@@ -1,4 +1,5 @@
 @asar
+math pri on ; why the fuck isn't this the default
 
 !FinalLevel = $000A;Set this to the level that triggers the credits scene. This level will repeat forever. Defaults to Front Door.
 ;To disable (if you, for example, want to leave some extra content after beating the final boss), set it to 0000.
@@ -218,7 +219,8 @@ LDA $0109|!addr
 BNE .Init
 LDA $13BF|!addr
 BNE +
-INC A
+JSL InitSRAM
+LDA #$01
 STA $13BF|!addr
 +
 JMP.w LoadEnd

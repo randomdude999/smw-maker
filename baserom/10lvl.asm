@@ -1,9 +1,14 @@
 
 incsrc "sa1detect.asm"
+namespace hexEdits
 incsrc "hex_edits.asm"
+namespace noow
 incsrc "noow.asm"
+namespace deathcounter
 incsrc "deathcount.asm"
+namespace _1or2player
 incsrc "1or2player.asm"
+namespace _10lvl
 
 org $008CCD ; write "LVL" text
     db $15,$38 ; L
