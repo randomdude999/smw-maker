@@ -3,20 +3,14 @@
 #include <vector>
 #include <map>
 #include "mwllib.h"
+#include "utils.h"
 
 MWLFile::MWLFile(std::string mwl_data) {
 	mwldata = mwl_data;
 }
 
 MWLFile::MWLFile(char* fname) {
-	std::ifstream f(fname, std::ios::binary);
-	std::string data;
-	f.seekg(0, std::ios::end);
-	data.resize((size_t)f.tellg());
-	f.seekg(0, std::ios::beg);
-	f.read(&data[0], data.size());
-	f.close();
-	mwldata = data;
+	mwldata = readfile(fname, std::ios::binary, 0);
 }
 
 uint32_t get_little_endian_int(const unsigned char* data) {

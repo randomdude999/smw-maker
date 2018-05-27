@@ -176,6 +176,7 @@ std::string insert_mwl(int lvlnum, MWLFile& mwl, std::string rom, std::map<int,i
 	definedata defs[] = { {"lvlnum", buf} };
 	pp.additional_defines = defs;
 	pp.additional_define_count = 1;
+	clock_t start_t = clock();
 	if(!asar_patch_ex(&pp)) {
 		int errdata_count;
 		const errordata* errs = asar_geterrors(&errdata_count);
@@ -188,7 +189,7 @@ std::string insert_mwl(int lvlnum, MWLFile& mwl, std::string rom, std::map<int,i
 	}
 	int blockc;
 	const writtenblockdata* blocks = asar_getwrittenblocks(&blockc);
-	log("[insert_mwl] Successfully ran Asar (wrote %d blocks)", blockc);
+	log("[insert_mwl] Successfully ran Asar (wrote %d blocks, took %f seconds)", blockc, timeDiff(start_t, clock()));
 	// for(int i = 0; i < blockc; i++) {
 	//	log("  Written block @ $%X len $%X\n", blocks[i].snesoffset, blocks[i].numbytes);
 	//}
@@ -240,6 +241,7 @@ std::string insert_lvl_and_sub(int startnum, std::string romdata, MWLFile& mwl, 
 	};
 	pp.memory_files = m_files;
 	pp.warning_setting_count = 0;
+	clock_t start_t = clock();
 	if(!asar_patch_ex(&pp)) {
 		int errdata_count;
 		const errordata* errs = asar_geterrors(&errdata_count);
@@ -252,7 +254,7 @@ std::string insert_lvl_and_sub(int startnum, std::string romdata, MWLFile& mwl, 
 	} else {
 		int blockc;
 		const writtenblockdata* blocks = asar_getwrittenblocks(&blockc);
-		log("[secondary_entr] Successfully ran Asar (wrote %d blocks)", blockc);
+		log("[secondary_entr] Successfully ran Asar (wrote %d blocks, took %f secs)", blockc, timeDiff(start_t, clock()));
 		// for(int i = 0; i < blockc; i++) {
 		//	log("  Written block @ $%X len %X\n", blocks[i].snesoffset, blocks[i].numbytes);
 		//}
@@ -286,7 +288,9 @@ std::string generate_10lvl_rom() {
 	}
 	random_unique(choices.begin(), choices.end(), 10);
 
+	clock_t all_start = clock();
 	for(int i = 0; i < 10; i++) {
+		clock_t this_start = clock();
 		log("Inserting level %d (ID %s)", i, choices[i].c_str());
 		std::string id = choices[i];
 		char main_mwl_name[256];
@@ -301,9 +305,9 @@ std::string generate_10lvl_rom() {
 		} else {
 			rom = insert_lvl_and_sub(i+1, rom, main_mwl, false, nullptr);
 		}
-		log("Successfully inserted level %d", i);
+		log("Successfully inserted level %d (took %f seconds)", i, timeDiff(this_start, clock()));
 	}
-	log("Inserted all level files");
+	log("Inserted all level files (total %f seconds)", timeDiff(all_start, clock()));
 	log("Out rom size: %d ($%X)", rom.size(), rom.size());
 
 	return rom;
@@ -313,6 +317,7 @@ std::string generate_1lvl_rom(std::string id) {
 	std::string rom = readfile("smw_maker_base_1lvl.smc", std::ios::binary, 512);
 	log("loaded base rom, size: %d ($%X)", rom.size(), rom.size());
 
+	clock_t start_t = clock();
 	char main_mwl_name[256];
 	snprintf(main_mwl_name, 256, "levels/%s_main.mwl", id.c_str());
 	MWLFile main_mwl = MWLFile(main_mwl_name);
@@ -325,7 +330,7 @@ std::string generate_1lvl_rom(std::string id) {
 	} else {
 		rom = insert_lvl_and_sub(1, rom, main_mwl, false, nullptr);
 	}
-	log("Sucessfully inserted");
+	log("Sucessfully inserted 1 lvl (%f seconds)", timeDiff(start_t, clock()));
 	log("Out rom size: %d ($%X)", rom.size(), rom.size());
 	return rom;
 }

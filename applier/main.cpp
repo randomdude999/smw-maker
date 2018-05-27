@@ -10,12 +10,24 @@
 #include <fcntl.h>
 #endif
 
-// thanks to Vitor Vilela and Alcaro
+// thanks to:
+// Vitor Vilela and Alcaro for misc coding help
+// Baserom patches:
+// Vitor Vilela (SA-1)
+// kaizoman/Thomas (death counter)
+// Noobish Noobsicle (one file, one player)
+// p4plus2 (1 or 2 players only)
+// Alcaro (no overworld)
+// Also Alcaro for writing Flips and Asar
 
 int main(int argc, char** argv) {
+	clock_t start_time = clock();
 	std::string rom;
 	srand((unsigned int)time(nullptr));
-	asar_init();
+	if(!asar_init()) {
+		fprintf(stderr, "Could not load Asar DLL");
+		return 1;
+	}
 	if (argc == 1) {
 		log("Generating 10lvl rom");
 		try {
@@ -35,9 +47,10 @@ int main(int argc, char** argv) {
 		}
 	}
 	else {
-		fprintf(stderr, "Error: invalid number of arguments. usage: %s [lvlid]", argv[0]);
+		fprintf(stderr, "Error: invalid number of arguments. usage: %s [lvlid]\n", argv[0]);
 		return 1;
 	}
+	log("Total: took %f seconds.", timeDiff(start_time, clock()));
 	if(_isatty(_fileno(stdout))) {
 		fprintf(stderr, "Won't write binary garbage to terminal.");
 	} else {

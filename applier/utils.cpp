@@ -4,6 +4,7 @@
 #include <cctype>
 #include <fstream>
 #include <queue>
+#include <ctime>
 #include "utils.h"
 
 std::map<char, int> bitdesc_to_values(const char* data, std::string bitdesc, int offset) {
@@ -41,6 +42,9 @@ std::map<char, int> bitdesc_to_values(const char* data, std::string bitdesc, int
 std::string readfile(std::string name, int mode, int offset) {
 	std::ifstream f(name, mode);
 	std::string data;
+	if(!f.good()) {
+		throw std::string("Could not open file ")+name;
+	}
 	f.seekg(0, std::ios::end);
 	data.resize((size_t)f.tellg()-offset);
 	f.seekg(offset, std::ios::beg);
@@ -152,4 +156,8 @@ std::string compress_bg(std::string data) {
 bool file_exists(std::string name) {
 	std::ifstream f(name);
 	return f.good();
+}
+
+float timeDiff(clock_t start, clock_t end) {
+	return (float)(end - start) / CLOCKS_PER_SEC;
 }

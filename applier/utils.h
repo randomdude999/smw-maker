@@ -1,7 +1,7 @@
 #pragma once
 #include <map>
 #include <cstdlib>
-//#include <fstream>
+#include <ctime>
 #include <cstdio>
 #include <exception>
 
@@ -11,6 +11,7 @@ std::string readfile(std::string name, int mode = 0, int offset = 0);
 std::string rle1_compress(std::string input);
 std::string compress_bg(std::string data);
 bool file_exists(std::string name);
+float timeDiff(clock_t start, clock_t end);
 
 inline int snestopc(int addr) { return ((addr&0x7F0000)>>1|(addr&0x7FFF)); }
 inline int pctosnes(int addr) { return ((addr<<1)&0x7F0000)|(addr&0x7FFF)|0x8000; }
