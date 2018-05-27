@@ -1,5 +1,6 @@
 <?php
-$mysqli = new mysqli("localhost", "root", null, "smwmaker");
+include 'common_includes.php';
+$mysqli = connect_db();
 session_start();
 if($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST["token"])) {
@@ -15,9 +16,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $res = $stmt->get_result();
         if ($res->num_rows == 0) {
-            http_response_code(302);
-            header("Location: login.php?errmsg=invalid_token");
-            echo "<html><body><a href='login.php?errmsg=invalid_token'>click me</a></body></html>";
+            redirect("login.php?errmsg=invalid_token");
             return;
         }
         $row = $res->fetch_array();

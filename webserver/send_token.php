@@ -10,11 +10,12 @@ function httpPost($url, $data)
     return $response;
 }
 
-function go_back_with_msg($msg) {
-    http_response_code(302);
-    header("Location: login.php?errmsg=$msg");
-    echo "<html><body><a href='login.php?errmsg=$msg'>click me</a></body></html>";
-}
+# function go_back_with_msg($msg) {
+#     http_response_code(302);
+#     header("Location: login.php?errmsg=$msg");
+#     echo "<html><body><a href='login.php?errmsg=$msg'>click me</a></body></html>";
+# }
+# use redirect("login.php?errmsg=$msg")
 
 $mysqli = new mysqli("localhost", "root", null, "smwmaker");
 session_start();
@@ -34,7 +35,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = $stmt->get_result();
         if($res->num_rows > 0) {
             // already exists in DB
-
+            
+        } else {
+            // not in DB
+            
         }
     }
 } else {

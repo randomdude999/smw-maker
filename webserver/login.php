@@ -1,5 +1,6 @@
 <?php
-$mysqli = new mysqli("localhost", "root", null, "smwmaker");
+include 'common_includes.php';
+$mysqli = connect_db();
 session_start();
 ?>
 <!DOCTYPE html>

@@ -1,5 +1,6 @@
 <?php
-$mysqli = new mysqli("localhost", "root", null, "smwmaker");
+include 'common_includes.php';
+$mysqli = connect_db();
 session_start();
 ?>
 <!DOCTYPE html>
@@ -58,7 +59,7 @@ if(!$res) {
 }
 foreach($res as $row) {
     echo "<div class='lvl'><a href='1lvl.php?id=$row[id]'>$row[name]</a><br>";
-    echo "Created by <a href='https://smwc.me/u/$row[author]'>$row[author]</a><br>";
+    echo "Created by <a href=\"https://smwc.me/u/$row[author]\">$row[author]</a><br>";
     echo "Difficulty: ".$difficulties[$row["difficulty"]];
     if($row["avg_rating"]!==NULL) {
         echo "<br>Rating: ".number_format($row["avg_rating"],1)."/5";
