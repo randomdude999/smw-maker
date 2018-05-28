@@ -2,19 +2,23 @@
 $start_t = microtime(TRUE);
 $main_dir = realpath('..');
 $dirsep = DIRECTORY_SEPARATOR;
-$descriptorspec = array(
-    # 0 => array("pipe", "rb"),
-    # 1 => array("pipe", "wb"),
-    2 => array("pipe", "wb")
-);
-# $proc_stdout = "";
-$applier_stderr = "";
+
+if(empty($_GET["id"])) {
+    $cmd = $main_dir.$dirsep.'applier'.$dirsep.'MWLApplier';
+} else {
+    if(!ctype_digit($_GET["id"]) || !file_exists("../levels/$_GET[id]_main.mwl")) {
+        echo "Level doesn't exist";
+        return;
+    }
+    $cmd = $main_dir.$dirsep."applier".$dirsep."MWLApplier $_GET[id]";
+}
+
 $newrom_name = tempnam("", "");
 $stderr_name = tempnam("", "");
 $old_wd = getcwd();
 chdir($main_dir);
 $mwlapplier_start_t = microtime(TRUE);
-exec($main_dir.$dirsep.'applier'.$dirsep.'MWLApplier >'.escapeshellarg($newrom_name)." 2>".escapeshellarg($stderr_name), NULL, $applier_exitcode);
+exec($cmd.' >'.escapeshellarg($newrom_name)." 2>".escapeshellarg($stderr_name), NULL, $applier_exitcode);
 $mwlapplier_end_t = microtime(TRUE);
 chdir($old_wd);
 $applier_stderr = file_get_contents($stderr_name);
