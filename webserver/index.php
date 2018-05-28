@@ -28,7 +28,7 @@ if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"]) {
     echo "<p><a href='login.php'>Log in</a></p>";
 }
 ?>
-    <a href="/10lvl.php">Play random selection of 10 levels</a>
+    <a href="play.php">Play random selection of 10 levels</a>
     <p>Browse levels: (click on the name to play)</p>
 <?php
 
@@ -58,7 +58,7 @@ if(!$res) {
     echo "Error querying MySQL: $mysqli->error"; 
 }
 foreach($res as $row) {
-    echo "<div class='lvl'><a href='1lvl.php?id=$row[id]'>$row[name]</a><br>";
+    echo "<div class='lvl'><a href='play.php?id=$row[id]'>$row[name]</a><br>";
     echo "Created by <a href=\"https://smwc.me/u/$row[author]\">$row[author]</a><br>";
     echo "Difficulty: ".$difficulties[$row["difficulty"]];
     if($row["avg_rating"]!==NULL) {
