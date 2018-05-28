@@ -19,3 +19,6 @@ sysLMRestore/
 *.vcxproj.user
 /applier/Debug
 /applier/Release
+
+# misc
+randombot_credentials.txt
