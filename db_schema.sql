@@ -1,8 +1,8 @@
-
 CREATE TABLE users (
   id INTEGER AUTO_INCREMENT,
   smwc_id INTEGER NOT NULL UNIQUE,
   name VARCHAR(255) NOT NULL,
+  token VARCHAR(32) NOT NULL UNIQUE,
   PRIMARY KEY (id)
 );
 CREATE TABLE levels (
@@ -22,12 +22,3 @@ CREATE TABLE ratings (
   FOREIGN KEY (levelId) REFERENCES users (id),
   FOREIGN KEY (userId) REFERENCES users (id)
 );
-CREATE TABLE login_tokens (
-  user_id INTEGER NOT NULL,
-  token VARCHAR(32) NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users (id),
-  UNIQUE(token)
-);
-
-
- 
