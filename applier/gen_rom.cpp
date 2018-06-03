@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <fstream>
+#include <algorithm>
 #include "gen_rom.h"
 #include "mwllib.h"
 #include "utils.h"
@@ -284,7 +285,12 @@ std::string generate_10lvl_rom() {
 	}
 	while(choices.size() < 10) {
 		// slight hack to make sure we don't end up short of levels
-		choices.insert(choices.end(), choices.begin(), choices.end()); // double the list
+
+		// this version was actually undefined behavior
+		// choices.insert(choices.end(), choices.begin(), choices.end());
+		auto old_count = choices.size();
+		choices.resize(2*old_count);
+		std::copy_n(choices.begin(), old_count, choices.begin() + old_count);
 	}
 	random_unique(choices.begin(), choices.end(), 10);
 

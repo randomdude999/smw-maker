@@ -11,12 +11,7 @@ std::vector<std::string> list_files_in_dir(std::string dirname) {
 	if(dir == nullptr) return out;
 	while((ent = readdir(dir)) != nullptr) {
 		if(ent->d_type != DT_REG) continue;
-		std::string fullpath;
-		fullpath += dirname;
-		if(!ends_with(dirname, "/")) {
-			fullpath += "/";
-		}
-		fullpath += ent->d_name;
-		out.push_back(fullpath);
+		out.push_back(ent->d_name);
 	}
+	return out;
 }
