@@ -26,7 +26,7 @@ org $009BC9;save game routine - never used though
 db $00
 
 ; actually, lets just use freespace like normal people
-freecode
+freecode cleaned ; actually not cleaned but we build a new rom every time so whatever
 Mymainc:
 if !FinalLevel13BF-1
     LDA $13BF|!addr
@@ -125,11 +125,28 @@ LDA $13BF|!addr
 DEC A
 RTL
 
+; dangit alcaro, why were you so obsessed with not using freespace
+pushpc
+freecode
 Mymain:
 STA $0DD5|!addr
-autoclean JSL Mymainc
+    ; random copypaste from another file
+    LDA $13BF|!addr
+    CMP #$0A ; the levelnum gets incremented before this code runs so compare with max+1
+    BNE .ret
+    LDX #$08
+    STX $13C6|!addr
+    LDY #$18         ;\ switch to gamemode cutscene
+    STY $0100|!addr  ;/
+    INC $13D9|!addr  ; what is this
+    LDA #$01         ;\ Write fade direction
+    STA $0DAF|!addr  ;/
+    JML $00CA30|!bank ; a RTS in bank 0
+.ret
+JSL Mymainc
 LDA $13C6|!addr
-JML $00CA04|!bank
+JML $00CA25|!bank
+pullpc
 
 Mymain4:
 LDY #$0B
@@ -171,7 +188,7 @@ org $00A099
 BEQ $00;make the OW never appear, load the level directly
 
 org $00C9FE         
-JML Mymain;level beaten (both goal tape and keyhole)
+autoclean JML Mymain;level beaten (both goal tape and keyhole)
 
 org $00CA06
 JSL Mymain3
