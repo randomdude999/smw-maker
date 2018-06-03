@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 		try {
 			rom = generate_10lvl_rom();
 		} catch(std::string err) {
-			fprintf(stderr, "%s", err.c_str());
+			fprintf(stderr, "%s\n", err.c_str());
 			return 1;
 		}
 	}
@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
 		try {
 			rom = generate_1lvl_rom(argv[1]);
 		} catch(std::string err) {
-			fprintf(stderr, "%s", err.c_str());
+			fprintf(stderr, "%s\n", err.c_str());
 			return 1;
 		}
 	}
@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
 	}
 	log("Total: took %f seconds.", timeDiff(start_time, clock()));
 	if(isatty(fileno(stdout))) {
-		fprintf(stderr, "Won't write binary garbage to terminal.");
+		fprintf(stderr, "Won't write binary garbage to terminal.\n");
 	} else {
 #ifdef _WIN32
 		// fucking windows... this should make stdout be binary not text
