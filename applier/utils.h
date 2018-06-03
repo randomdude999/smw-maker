@@ -4,10 +4,11 @@
 #include <ctime>
 #include <cstdio>
 #include <exception>
+#include <fstream>
 
 
 std::map<char, int> bitdesc_to_values(const char* data, std::string bitdesc, int offset);
-std::string readfile(std::string name, int mode = 0, int offset = 0);
+std::string readfile(std::string name, std::ios_base::openmode mode, int offset = 0);
 std::string rle1_compress(std::string input);
 std::string compress_bg(std::string data);
 bool file_exists(std::string name);
@@ -36,4 +37,4 @@ inline bool ends_with(std::string const & value, std::string const & ending) {
 	return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
 }
 
-#define log(fmt, ...) fprintf(stderr, fmt "\n", __VA_ARGS__)
+#define log(fmt, ...) fprintf(stderr, fmt "\n", ##__VA_ARGS__)

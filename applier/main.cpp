@@ -1,13 +1,17 @@
 #include <ctime>
 #include <cstdlib>
 #include <cstdio>
-#include <io.h>
 #include "gen_rom.h"
 #include "asardll.h"
 #include "utils.h"
 #include "platform.h"
 #ifdef _WIN32
 #include <fcntl.h>
+#include <io.h>
+#define fileno _fileno
+#define isatty _isatty
+#else
+#include <unistd.h>
 #endif
 
 // thanks to:
@@ -51,12 +55,12 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 	log("Total: took %f seconds.", timeDiff(start_time, clock()));
-	if(_isatty(_fileno(stdout))) {
+	if(isatty(fileno(stdout))) {
 		fprintf(stderr, "Won't write binary garbage to terminal.");
 	} else {
 #ifdef _WIN32
 		// fucking windows... this should make stdout be binary not text
-		_setmode(_fileno(stdout), O_BINARY);
+		_setmode(fileno(stdout), O_BINARY);
 #endif
 		fwrite(rom.data(), 1, rom.size(), stdout);
 	}

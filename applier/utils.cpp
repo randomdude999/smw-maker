@@ -11,7 +11,7 @@ std::map<char, int> bitdesc_to_values(const char* data, std::string bitdesc, int
 	std::map<char, int> out;
 	int bitc;
 	int i;
-	bitdesc.erase(std::remove_if(bitdesc.begin(), bitdesc.end(), std::isspace), bitdesc.end());
+	bitdesc.erase(std::remove_if(bitdesc.begin(), bitdesc.end(), ::isspace), bitdesc.end());
 	bitc = bitdesc.length();
 	// first pass, do uppercase chars only
 	for(i = 0; i < bitc; i++) {
@@ -39,7 +39,7 @@ std::map<char, int> bitdesc_to_values(const char* data, std::string bitdesc, int
 	return out;
 }
 
-std::string readfile(std::string name, int mode, int offset) {
+std::string readfile(std::string name, std::ios_base::openmode mode, int offset) {
 	std::ifstream f(name, mode);
 	std::string data;
 	if(!f.good()) {
