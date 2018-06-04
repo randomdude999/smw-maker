@@ -32,4 +32,4 @@ applier/MWLApplier
 *.dll
 
 # misc
-randombot_credentials.txt
+randombot_credentials.json
