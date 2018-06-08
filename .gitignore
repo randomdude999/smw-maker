@@ -26,10 +26,15 @@ sysLMRestore/
 flips
 asar
 asar-standalone
-applier/MWLApplier
+/applier/MWLApplier
+/MWLApplier
 *.exe
 *.so
 *.dll
+
+# Python stuff
+__pycache__/
+*.py[co]
 
 # misc
 randombot_credentials.json
