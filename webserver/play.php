@@ -1,16 +1,21 @@
 <?php
+
+function path_join(...$parts) {
+    return implode(DIRECTORY_SEPARATOR, $parts);
+}
+
 $start_t = microtime(TRUE);
 $main_dir = realpath('..');
 $dirsep = DIRECTORY_SEPARATOR;
 
 if(empty($_GET["id"])) {
-    $cmd = $main_dir.$dirsep.'applier'.$dirsep.'MWLApplier';
+    $cmd = path_join($main_dir, 'applier', 'MWLApplier');
 } else {
     if(!ctype_digit($_GET["id"]) || !file_exists("../levels/$_GET[id]_main.mwl")) {
         echo "Level doesn't exist";
         return;
     }
-    $cmd = $main_dir.$dirsep."applier".$dirsep."MWLApplier $_GET[id]";
+    $cmd = path_join($main_dir,"applier","MWLApplier")." $_GET[id]";
 }
 
 $newrom_name = tempnam("", "");
@@ -32,7 +37,7 @@ if($applier_exitcode !== 0) {
 $output_name = tempnam("", "");
 
 $flips_start_t = microtime(TRUE);
-exec($main_dir.$dirsep.'flips -b --exact -c ../clean_smw.sfc '.escapeshellarg($newrom_name)." ".escapeshellarg($output_name), $flips_out, $flips_exitcode);
+exec(path_join($main_dir,'flips').' -b --exact -c ../clean_smw.sfc '.escapeshellarg($newrom_name)." ".escapeshellarg($output_name), $flips_out, $flips_exitcode);
 $flips_end_t = microtime(TRUE);
 if($flips_exitcode !== 0) {
     echo "<pre>Error running flips (code $flips_exitcode):\n";

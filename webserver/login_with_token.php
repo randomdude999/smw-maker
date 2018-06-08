@@ -25,7 +25,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["user_id"] = $row["user_id"];
     }
 } else {
-    http_response_code(400);
-    echo "error: invalid request method";
+    # http_response_code(400);
+    # echo "error: invalid request method";
+    redirect("login.php");
 }
 ?>
