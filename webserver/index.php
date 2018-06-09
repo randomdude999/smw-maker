@@ -18,16 +18,14 @@ session_start();
     </style>
 </head>
 <body>
-    <p>So this is a thing i made. Basically like mario maker except in SMW.</p>
-<?php
-if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"]) {
-    echo "<p>Logged in as <a href='https://smwc.me/u/".$_SESSION["username"]."'>".$_SESSION["username"]."</a></p>";
-    echo "<p><a href='logout.php'>Log out</a></p>";
-    echo "<p><a href='upload.php'>Upload level</a></p>";
-} else {
-    echo "<p><a href='login.php'>Log in</a></p>";
-}
-?>
+    <p>So this is a thing i made. Basically kinda like mario maker except in SMW.</p>
+<?php if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"]): ?>
+    <p>Logged in as <a href='https://smwc.me/u/<?= $_SESSION["username"] ?>'><?= $_SESSION["username"] ?></a></p>
+    <form action='logout.php' method='POST'><input type='submit' value='Log out'></form>
+    <p><a href='upload.php'>Upload level</a></p>
+<?php else: ?>
+    <p><a href='login.php'>Log in</a></p>
+<?php endif; ?>
     <a href="play.php">Play random selection of 10 levels</a>
     <p>Browse levels: (click on the name to play)</p>
 <?php
@@ -56,16 +54,20 @@ $difficulties = [
 $res = $mysqli->query($get_display_level_data_query);
 if(!$res) {
     echo "Error querying MySQL: $mysqli->error"; 
+    return;
 }
-foreach($res as $row) {
-    echo "<div class='lvl'><a href='play.php?id=$row[id]'>$row[name]</a><br>";
-    echo "Created by <a href=\"https://smwc.me/u/$row[author]\">$row[author]</a><br>";
-    echo "Difficulty: ".$difficulties[$row["difficulty"]];
-    if($row["avg_rating"]!==NULL) {
-        echo "<br>Rating: ".number_format($row["avg_rating"],1)."/5";
-    }
-    echo "</div>";
+if($res->num_rows === 0) {
+    echo "No levels found.";
 }
-?>
+
+foreach($res as $row): ?>
+    <div class='lvl'><a href='play.php?id=<?= $row[id] ?>'><?= $row[name] ?></a><br>
+    Created by <a href="https://smwc.me/u/<?= $row[author] ?>"><?= $row[author] ?></a><br>";
+    Difficulty: <?= $difficulties[$row["difficulty"]] ?>
+    <?php if($row["avg_rating"]!==NULL): ?>
+        <br>Rating: <?= number_format($row["avg_rating"],1) ?>/5
+    <?php endif; ?>
+    </div>
+<?php endforeach; ?>
 </body>
 </html>

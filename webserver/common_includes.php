@@ -9,8 +9,11 @@ function connect_db() {
 }
 
 function redirect($loc) {
-    http_response_code(302);
+    http_response_code(303); // use 303 to make sure the request method is changed to GET
     header("Location: $loc");
     echo "<html><body><a href='$loc'>click me</a></body></html>";
 }
-?>
+
+function get(&$var, $default=null) {
+    return isset($var) ? $var : $default;
+}

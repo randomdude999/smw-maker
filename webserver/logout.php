@@ -2,12 +2,15 @@
 include 'common_includes.php';
 session_start();
 
-if(isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] === true) {
-    $_SESSION["logged_in"] = false;
-    unset($_SESSION["username"]);
-    unset($_SESSION["user_id"]);
-    redirect("index.php");
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+	if(get($_SESSION["logged_in"], false) === true) {
+	    $_SESSION["logged_in"] = false;
+	    unset($_SESSION["username"]);
+	    unset($_SESSION["user_id"]);
+	    redirect("index.php");
+	} else {
+	    echo "You aren't even logged in!";
+	}
 } else {
-    echo "You aren't even logged in!";
+	redirect("index.php");
 }
-?>

@@ -9,8 +9,6 @@ CREATE TABLE levels (
   id INTEGER AUTO_INCREMENT,
   name VARCHAR(255) NOT NULL,
   author INTEGER NOT NULL,
-  bg_index INTEGER,
-  sub_bg_index INTEGER,
   difficulty INTEGER NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (author) REFERENCES users (id)
