@@ -23,7 +23,7 @@ $stderr_name = tempnam("", "");
 $old_wd = getcwd();
 chdir($main_dir);
 $mwlapplier_start_t = microtime(TRUE);
-exec($cmd.' >'.escapeshellarg($newrom_name)." 2>".escapeshellarg($stderr_name), NULL, $applier_exitcode);
+exec($cmd.' >'.escapeshellarg($newrom_name)." 2>".escapeshellarg($stderr_name), $unused, $applier_exitcode);
 $mwlapplier_end_t = microtime(TRUE);
 chdir($old_wd);
 $applier_stderr = file_get_contents($stderr_name);
@@ -37,7 +37,7 @@ if($applier_exitcode !== 0) {
 $output_name = tempnam("", "");
 
 $flips_start_t = microtime(TRUE);
-exec(path_join($main_dir,'flips').' -b --exact -c ../clean_smw.sfc '.escapeshellarg($newrom_name)." ".escapeshellarg($output_name), $flips_out, $flips_exitcode);
+exec(path_join($main_dir,'flips').' -b --exact -c ../clean_smw.sfc '.escapeshellarg($newrom_name)." ".escapeshellarg($output_name)." 2>&1", $flips_out, $flips_exitcode);
 $flips_end_t = microtime(TRUE);
 if($flips_exitcode !== 0) {
     echo "<pre>Error running flips (code $flips_exitcode):\n";
