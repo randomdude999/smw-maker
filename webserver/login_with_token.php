@@ -9,24 +9,28 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         return;
     }
     $token = $_POST["token"];
-    $stmt = $mysqli->prepare("SELECT users.name, user_id, token FROM login_tokens INNER JOIN users ON users.id = user_id WHERE token = ?");
+    $stmt = $mysqli->prepare("SELECT name, id, smwc_id, token FROM users WHERE token = ?");
+    if($stmt === FALSE) {
+        echo "MySQL error: ".$mysqli->error;
+        return;
+    }
     $stmt->bind_param("s", $token);
     if(!$stmt->execute()) {
         echo "MySQL error: ".$mysqli->error;
-    } else {
-        $res = $stmt->get_result();
-        if ($res->num_rows == 0) {
-            redirect("login.php?errmsg=invalid_token");
-            return;
-        }
-        $row = $res->fetch_array();
-        $_SESSION["logged_in"] = TRUE;
-        $_SESSION["username"] = $row["name"];
-        $_SESSION["user_id"] = $row["user_id"];
+        return;
     }
+    $res = $stmt->get_result();
+    if ($res->num_rows == 0) {
+        redirect("login.php?errmsg=invalid_token");
+        return;
+    }
+    $row = $res->fetch_array();
+    $_SESSION["logged_in"] = TRUE;
+    $_SESSION["username"] = $row["name"];
+    $_SESSION["smwc_id"] = $row["smwc_id"];
+    $_SESSION["user_id"] = $row["id"];
+    redirect("index.php");
 } else {
-    # http_response_code(400);
-    # echo "error: invalid request method";
     redirect("login.php");
 }
 ?>
