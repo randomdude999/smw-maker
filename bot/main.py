@@ -72,12 +72,7 @@ def handle_user(uname, uid):
     while token in used_tokens:
         # because repeating code is totally Pythonic™
         token = secrets.token_hex(16)
-    # could probably use ON DUPLICATE KEY UPDATE here but the manual says that messes with primary keys
-    cur.execute("SELECT smwc_id FROM users WHERE smwc_id=%s", (uid,))
-    if len(cur.fetchall()) > 0:
-        cur.execute("UPDATE users SET name=%s, token=%s WHERE smwc_id=%s", (uname, token, uid))
-    else:
-        cur.execute("INSERT INTO users (smwc_id, name, token) VALUES (%s, %s, %s)", (uid, uname, token))
+    cur.execute("INSERT INTO users (smwc_id, name, token) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE name=%s, token=%s", (uid, uname, token, uname, token))
     conn.commit()
     send_pm(uname, "Re: smwmaker verify", pm_template.format(token))
 
