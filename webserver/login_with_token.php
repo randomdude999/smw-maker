@@ -9,17 +9,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         return;
     }
     $token = $_POST["token"];
-    $stmt = $mysqli->prepare("SELECT name, id, smwc_id, token FROM users WHERE token = ?");
-    if($stmt === FALSE) {
-        echo "MySQL error: ".$mysqli->error;
-        return;
-    }
-    $stmt->bind_param("s", $token);
-    if(!$stmt->execute()) {
-        echo "MySQL error: ".$mysqli->error;
-        return;
-    }
-    $res = $stmt->get_result();
+    $res = sql_prepared_exec($mysqli, "SELECT name, id, smwc_id, token FROM users WHERE token = ?", "s", $token);
+    if($res === NULL)
+        die("MySQL error: ".$mysqli->error);
     if ($res->num_rows == 0) {
         redirect("login.php?errmsg=invalid_token");
         return;

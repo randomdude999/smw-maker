@@ -29,7 +29,7 @@ function uploadCodeToMsg($code) {
 if($_SERVER["REQUEST_METHOD"] === "POST") {
 	if(get($_SESSION["logged_in"], false) === false)
 		die("Not logged in.");
-	if(empty($_POST["lvlname"]) || empty($_POST["difficulty"]))
+	if(!isset($_POST["lvlname"]) || !isset($_POST["difficulty"]))
 		die("Invalid request.");
 	$difficulty = $_POST["difficulty"];
 	$level_name = $_POST["lvlname"];
@@ -42,12 +42,12 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 		die("lvlname too long");
 	if(!ctype_digit($difficulty))
 		die("Invalid difficulty");
-	if(intval($difficulty) > 3) // it can't be <0 because that would require non-digit chars
+	if(intval($difficulty, 10) > 3) // it can't be <0 because that would require non-digit chars
 		die("Invalid difficulty");
-	$difficulty = intval($difficulty);
+	$difficulty = intval($difficulty, 10);
 	if($_FILES["mainfile"]["error"] !== 0)
 		die(uploadCodeToMsg($_FILES["mainfile"]["error"]));
-	if(!empty($_POST["hassub"]) && $_FILES["subfile"]["error"] !== 0)
+	if($hassub && $_FILES["subfile"]["error"] !== 0)
 		die(uploadCodeToMsg($_FILES["subfile"]["error"]));
 	exec(realpath("..")."/checkmwl.py ".escapeshellarg($_FILES["mainfile"]["tmp_name"])." 2>&1", $output, $retcode);
 	if($retcode !== 0) {
@@ -65,11 +65,9 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 			return;
 		}
 	}
-	$stmt = $mysqli->prepare("INSERT INTO levels (name, author, difficulty, verified) VALUES (?, ?, ?, 0)");
-	if($stmt === FALSE)
-		die("MySQL error: ".$mysqli->error);
-	$stmt->bind_param("sii", $level_name, $_SESSION["user_id"], $difficulty);
-	if(!$stmt->execute())
+	if(NULL === sql_prepared_exec($mysqli,
+		"INSERT INTO levels (name, author, difficulty, verified) VALUES (?, ?, ?, 0)",
+		"sii", $level_name, $_SESSION["user_id"], $difficulty))
 		die("MySQL error: ".$mysqli->error);
 	$id = $mysqli->insert_id;
 	rename($_FILES["mainfile"]["tmp_name"], "../levels/${id}_main.mwl");

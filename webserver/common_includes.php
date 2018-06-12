@@ -21,3 +21,11 @@ function get(&$var, $default=null) {
 function is_logged_in() {
 	return get($_SESSION["logged_in"], FALSE);
 }
+
+function sql_prepared_exec($mysqli, $query, $types, ...$args) {
+	$stmt = $mysqli->prepare($query);
+	if($stmt === FALSE) return NULL;
+	$stmt->bind_param($types, ...$args);
+	if(!$stmt->execute()) return NULL;
+	return $stmt->get_result();
+}
