@@ -12,7 +12,12 @@ if(empty($_GET["id"])) {
     $cmd = path_join($main_dir, 'applier', 'MWLApplier');
 } else {
     if(!ctype_digit($_GET["id"]) || !file_exists("../levels/$_GET[id]_main.mwl")) {
-        echo "Level doesn't exist";
+        die("Level doesn't exist");
+    }
+    if(file_exists("../levels/$_GET[id].bps")) {
+        header("Content-Type: application/octet-stream");
+        header("Content-Disposition: attachment; filename=smwmaker.bps");
+        readfile("../levels/$_GET[id].bps");
         return;
     }
     $cmd = path_join($main_dir,"applier","MWLApplier")." $_GET[id]";
@@ -49,11 +54,13 @@ if($flips_exitcode !== 0) {
 $out = file_get_contents($output_name);
 unlink($output_name);
 unlink($newrom_name);
-# header("Content-Type: application/octet-stream");
-# header("Content-Disposition: attachment; filename=smwmaker.bps");
-# echo $out;
-$end_t = microtime(TRUE);
-echo "Total time: ".number_format($end_t-$start_t,4)."<br>";
-echo "Flips time: ".number_format($flips_end_t-$flips_start_t,4)."<br>";
-echo "Applier time: ".number_format($mwlapplier_end_t-$mwlapplier_start_t,4)."<br>";
-echo "Applier stderr:<pre>".$applier_stderr."</pre>";
+if(!empty($_GET["id"]))
+    file_put_contents("../levels/$_GET[id].bps", $out);
+header("Content-Type: application/octet-stream");
+header("Content-Disposition: attachment; filename=smwmaker.bps");
+echo $out;
+# $end_t = microtime(TRUE);
+# echo "Total time: ".number_format($end_t-$start_t,4)."<br>";
+# echo "Flips time: ".number_format($flips_end_t-$flips_start_t,4)."<br>";
+# echo "Applier time: ".number_format($mwlapplier_end_t-$mwlapplier_start_t,4)."<br>";
+# echo "Applier stderr:<pre>".$applier_stderr."</pre>";
