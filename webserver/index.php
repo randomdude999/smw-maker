@@ -19,7 +19,7 @@ session_start();
 </head>
 <body>
     <p>So this is a thing i made. Basically kinda like mario maker except in SMW.</p>
-<?php if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"]): ?>
+<?php if (is_logged_in()): ?>
     <p>Logged in as <a href='https://smwc.me/u/<?= $_SESSION["username"] ?>'><?= $_SESSION["username"] ?></a></p>
     <form action='logout.php' method='POST'><input type='submit' value='Log out'></form>
     <p><a href='upload.php'>Upload level</a></p>
@@ -62,10 +62,20 @@ if($res->num_rows === 0) {
 
 foreach($res as $row): ?>
     <div class='lvl'><a href='play.php?id=<?= $row[id] ?>'><?= $row[name] ?></a><br>
-    Created by <a href="https://smwc.me/u/<?= $row[author] ?>"><?= $row[author] ?></a><br>";
+    Created by <a href="https://smwc.me/u/<?= $row[author] ?>"><?= $row[author] ?></a><br>
     Difficulty: <?= $difficulties[$row["difficulty"]] ?>
     <?php if($row["avg_rating"]!==NULL): ?>
         <br>Rating: <?= number_format($row["avg_rating"],1) ?>/5
+    <?php endif; ?>
+    <?php if(is_logged_in()): ?>
+      <br><form action="rate.php" method="POST">Rate:
+          <input type="hidden" name="lvlid" value="<?= $row['id'] ?>">
+          <input type="submit" name="rating" value="1">
+          <input type="submit" name="rating" value="2">
+          <input type="submit" name="rating" value="3">
+          <input type="submit" name="rating" value="4">
+          <input type="submit" name="rating" value="5">
+      </form>
     <?php endif; ?>
     </div>
 <?php endforeach; ?>

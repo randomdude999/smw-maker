@@ -17,3 +17,7 @@ function redirect($loc) {
 function get(&$var, $default=null) {
     return isset($var) ? $var : $default;
 }
+
+function is_logged_in() {
+	return get($_SESSION["logged_in"], FALSE);
+}

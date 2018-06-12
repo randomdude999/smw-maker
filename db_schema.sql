@@ -21,6 +21,5 @@ CREATE TABLE ratings (
   FOREIGN KEY (levelId) REFERENCES levels (id),
   FOREIGN KEY (userId) REFERENCES users (id),
   # only 1 vote per user per level
-  # this better work...
   CONSTRAINT UNIQUE (levelId, userId)
 );
