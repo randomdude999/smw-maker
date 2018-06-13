@@ -16,7 +16,7 @@ session_start();
 </head>
 <body>
     <p>First, on SMWC, send a PM to randombot999 with the title "smwmaker verify" (no quotes) and any message (<a href="https://www.smwcentral.net/?p=pm&do=compose&user=34934&subject=smwmaker%20verify&text=smwmaker%20verify">or just click here</a>). The bot will reply with a token (may take up to 30 seconds). Enter this token here.</p>
-    <form action="login_with_token.php" method="post">Enter token: <input name="token" placeholder="Login token"><input type="submit" value="Log in"></div>
+    <form action="login_.php" method="post">Enter token: <input name="token" placeholder="Login token"><input type="submit" value="Log in"></div>
 <?php
 if (!empty($_GET["errmsg"])) {
     echo "<div class=error>";
