@@ -35,6 +35,7 @@ SELECT levels.id,
        levels.name,
        levels.difficulty,
        users.name AS author,
+       users.smwc_id AS author_id,
        AVG(rating) AS avg_rating,
        COUNT(rating) AS rating_count
   FROM levels
@@ -62,7 +63,7 @@ if($res->num_rows === 0) {
 
 foreach($res as $row): ?>
     <div class='lvl'><a href='play.php?id=<?= $row['id'] ?>'><?= $row['name'] ?></a><br>
-    Created by <a href="https://smwc.me/u/<?= $row['author'] ?>"><?= $row['author'] ?></a><br>
+    Created by <a href="https://smwc.me/u/<?= $row['author_id'] ?>"><?= $row['author'] ?></a><br>
     Difficulty: <?= $difficulties[$row["difficulty"]] ?>
     <?php if($row["avg_rating"]!==NULL): ?>
         <br>Rating: <?= number_format($row["avg_rating"],1) ?>/5
