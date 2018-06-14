@@ -35,7 +35,7 @@ $applier_stderr = file_get_contents($stderr_name);
 unlink($stderr_name);
 if($applier_exitcode !== 0) {
     echo "<pre>Error running applier (code $applier_exitcode):\n";
-    echo $applier_stderr;
+    echo htmlspecialchars($applier_stderr);
     echo "</pre>";
     return;
 }
@@ -46,7 +46,7 @@ exec(path_join($main_dir,'flips').' -b --exact -c ../clean_smw.sfc '.escapeshell
 $flips_end_t = microtime(TRUE);
 if($flips_exitcode !== 0) {
     echo "<pre>Error running flips (code $flips_exitcode):\n";
-    echo join("\n", $flips_out);
+    echo htmlspecialchars(join("\n", $flips_out));
     echo "</pre>";
     return;
 }

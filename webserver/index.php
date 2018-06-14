@@ -20,7 +20,7 @@ session_start();
 <body>
     <p>So this is a thing i made. Basically kinda like mario maker except in SMW.</p>
 <?php if (is_logged_in()): ?>
-    <p>Logged in as <a href='https://smwc.me/u/<?= $_SESSION["username"] ?>'><?= $_SESSION["username"] ?></a></p>
+    <p>Logged in as <a href='https://smwc.me/u/<?= htmlspecialchars($_SESSION["smwc_id"]) ?>'><?= htmlspecialchars($_SESSION["username"]) ?></a></p>
     <form action='logout.php' method='POST'><input type='submit' value='Log out'></form>
     <p><a href='upload.php'>Upload level</a></p>
 <?php else: ?>
@@ -54,7 +54,7 @@ $difficulties = [
 
 $res = $mysqli->query($get_display_level_data_query);
 if(!$res) {
-    echo "Error querying MySQL: $mysqli->error"; 
+    echo "Error querying MySQL: ".htmlspecialchars($mysqli->error);
     return;
 }
 if($res->num_rows === 0) {
@@ -62,8 +62,8 @@ if($res->num_rows === 0) {
 }
 
 foreach($res as $row): ?>
-    <div class='lvl'><a href='play.php?id=<?= $row['id'] ?>'><?= $row['name'] ?></a><br>
-    Created by <a href="https://smwc.me/u/<?= $row['author_id'] ?>"><?= $row['author'] ?></a><br>
+    <div class='lvl'><a href='play.php?id=<?= $row['id'] ?>'><?= htmlspecialchars($row['name']) ?></a><br>
+    Created by <a href="https://smwc.me/u/<?= $row['author_id'] ?>"><?= htmlspecialchars($row['author']) ?></a><br>
     Difficulty: <?= $difficulties[$row["difficulty"]] ?>
     <?php if($row["avg_rating"]!==NULL): ?>
         <br>Rating: <?= number_format($row["avg_rating"],1) ?>/5

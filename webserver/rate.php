@@ -21,7 +21,7 @@ if(!is_logged_in())
 	die("not logged in");
 $res = sql_prepared_exec($mysqli, "SELECT author FROM levels WHERE id = ?", "i", $lvlid);
 if($res === NULL)
-	die("MySQL error: ".$mysqli->error);
+	die("MySQL error: ".htmlspecialchars($mysqli->error));
 if($res->num_rows === 0)
 	die("That level doesn't even exist");
 $author = $res->fetch_array()["author"];
@@ -30,5 +30,5 @@ if($author === $_SESSION['user_id'])
 if(NULL === sql_prepared_exec($mysqli,
 	"INSERT INTO ratings (levelId, userId, rating) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE rating=?",
 	"iiii", $lvlid, $author, $rating, $rating))
-	die("MySQL error: ".$mysqli->error);
+	die("MySQL error: ".htmlspecialchars($mysqli->error));
 redirect("index.php");

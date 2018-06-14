@@ -52,7 +52,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 	exec(realpath("..")."/checkmwl.py ".escapeshellarg($_FILES["mainfile"]["tmp_name"])." 2>&1", $output, $retcode);
 	if($retcode !== 0) {
 		echo "Error running MWL checker. This doesn't look like a valid MWL file. <pre>";
-		echo join("\n", $output);
+		echo htmlspecialchars(join("\n", $output));
 		echo "</pre>";
 		return;
 	}
@@ -60,7 +60,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 		exec(realpath("..")."/checkmwl.py ".escapeshellarg($_FILES["subfile"]["tmp_name"])." 2>&1", $output, $retcode);
 		if($retcode !== 0) {
 			echo "Error running MWL checker. This doesn't look like a valid MWL file. <pre>";
-			echo join("\n", $output);
+			echo htmlspecialchars(join("\n", $output));
 			echo "</pre>";
 			return;
 		}
@@ -68,7 +68,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 	if(NULL === sql_prepared_exec($mysqli,
 		"INSERT INTO levels (name, author, difficulty, verified) VALUES (?, ?, ?, 0)",
 		"sii", $level_name, $_SESSION["user_id"], $difficulty))
-		die("MySQL error: ".$mysqli->error);
+		die("MySQL error: ".htmlspecialchars($mysqli->error));
 	$id = $mysqli->insert_id;
 	rename($_FILES["mainfile"]["tmp_name"], "../levels/${id}_main.mwl");
 	if($hassub) rename($_FILES["subfile"]["tmp_name"], "../levels/${id}_sub.mwl");

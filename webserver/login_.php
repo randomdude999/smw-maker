@@ -11,7 +11,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     $token = $_POST["token"];
     $res = sql_prepared_exec($mysqli, "SELECT name, id, smwc_id, token FROM users WHERE token = ?", "s", $token);
     if($res === NULL)
-        die("MySQL error: ".$mysqli->error);
+        die("MySQL error: ".htmlspecialchars($mysqli->error));
     if ($res->num_rows == 0) {
         redirect("login.php?errmsg=invalid_token");
         return;
