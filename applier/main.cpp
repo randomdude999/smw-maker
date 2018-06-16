@@ -4,7 +4,6 @@
 #include "gen_rom.h"
 #include "asardll.h"
 #include "utils.h"
-#include "platform.h"
 #ifdef _WIN32
 #include <fcntl.h>
 #include <io.h>

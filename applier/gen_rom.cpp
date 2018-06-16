@@ -8,7 +8,6 @@
 #include "gen_rom.h"
 #include "mwllib.h"
 #include "utils.h"
-#include "platform.h"
 #include "asardll.h"
 
 char secondary_entrace_template[] = R"(
