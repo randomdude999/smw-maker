@@ -9,7 +9,9 @@ $main_dir = realpath('..');
 $dirsep = DIRECTORY_SEPARATOR;
 
 if(empty($_GET["id"])) {
-    $cmd = path_join($main_dir, 'applier', 'MWLApplier');
+    # TODO: choose levels using intelligent algorithm (respecting average rating, difficulty, etc)
+    $lvlids = [1,2,1,2,1,2,1,1,2,1];
+    $cmd = path_join($main_dir, 'applier', 'MWLApplier')." ".join(" ", $lvlids);
 } else {
     if(!ctype_digit($_GET["id"]) || !file_exists("../levels/$_GET[id]_main.mwl")) {
         die("Level doesn't exist");

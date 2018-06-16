@@ -32,10 +32,14 @@ int main(int argc, char** argv) {
 		fprintf(stderr, "Could not load Asar DLL");
 		return 1;
 	}
-	if (argc == 1) {
+	if (argc == 11) {
 		log("Generating 10lvl rom");
 		try {
-			rom = generate_10lvl_rom();
+			std::vector<std::string> args;
+			for(int i = 1; i < argc; i++) {
+				args.push_back(argv[i]);
+			}
+			rom = generate_10lvl_rom(args);
 		} catch(std::string err) {
 			fprintf(stderr, "%s\n", err.c_str());
 			return 1;
@@ -51,7 +55,7 @@ int main(int argc, char** argv) {
 		}
 	}
 	else {
-		fprintf(stderr, "Error: invalid number of arguments. usage: %s [lvlid]\n", argv[0]);
+		fprintf(stderr, "Error: invalid number of arguments\n", argv[0]);
 		return 1;
 	}
 	log("Total: took %f seconds.", timeDiff(start_time, clock()));

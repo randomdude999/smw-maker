@@ -265,34 +265,10 @@ std::string insert_lvl_and_sub(int startnum, std::string romdata, MWLFile& mwl, 
 	return romdata;
 }
 
-std::string generate_10lvl_rom() {
+std::string generate_10lvl_rom(std::vector<std::string> choices) {
 	log("Opening base rom");
 	std::string rom = readfile("smw_maker_base_10lvl.smc", std::ios::binary, 512);
 	log("loaded base rom, size: %d ($%X)", rom.size(), rom.size());
-	std::vector<std::string> choices;
-
-	log("Looking for level files");
-	for(std::string fname : list_files_in_dir("levels")) {
-		if(ends_with(fname, "_main.mwl")) {
-			std::string tmp = fname;
-			tmp.erase(tmp.find('_')); // erase everything starting with first _
-			choices.push_back(tmp);
-		}
-	}
-	log("Found %d level files", (int)choices.size());
-	if(choices.size() == 0) {
-		throw std::string("Error: couldn't find any level files");
-	}
-	while(choices.size() < 10) {
-		// slight hack to make sure we don't end up short of levels
-
-		// this version was actually undefined behavior
-		// choices.insert(choices.end(), choices.begin(), choices.end());
-		auto old_count = choices.size();
-		choices.resize(2*old_count);
-		std::copy_n(choices.begin(), old_count, choices.begin() + old_count);
-	}
-	random_unique(choices.begin(), choices.end(), 10);
 
 	clock_t all_start = clock();
 	for(int i = 0; i < 10; i++) {
