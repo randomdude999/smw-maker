@@ -40,7 +40,7 @@ std::string replace_screen_exits(std::string layer1_data, std::map<int, int> exi
 	size_t i = 5; // skip primary level header
 	std::string new_data = layer1_data.substr(0, 5); // add primary level header to output too
 	while(i < layer1_data.length()) {
-		if(layer1_data[i] == 0xFF) {
+		if(layer1_data[i] == '\xFF') {
 			new_data += '\xFF';
 			break;
 		}
@@ -150,7 +150,7 @@ std::string insert_mwl(int lvlnum, MWLFile& mwl, std::string rom, std::map<int,i
 		log("L2 is OBJ");
 	}
 	std::string sprite_data = mwl.get_section(MWLSection::sprite).substr(8);
-	log("L1 len: %d, L2 len: %d, sprite len: %d", new_l1_data.size(), l2_data.size(), sprite_data.size());
+	log("L1 len: %lu, L2 len: %lu, sprite len: %lu", new_l1_data.size(), l2_data.size(), sprite_data.size());
 	patchparams pp;
 	memset(&pp, 0, sizeof(pp));
 	pp.structsize = sizeof(pp);
@@ -266,7 +266,7 @@ std::string insert_lvl_and_sub(int startnum, std::string romdata, MWLFile& mwl, 
 std::string generate_10lvl_rom(std::vector<std::string> choices) {
 	log("Opening base rom");
 	std::string rom = readfile("smw_maker_base_10lvl.smc", std::ios::binary, 512);
-	log("loaded base rom, size: %d ($%X)", rom.size(), rom.size());
+	log("loaded base rom, size: %lu ($%lX)", rom.size(), rom.size());
 
 	clock_t all_start = clock();
 	for(int i = 0; i < 10; i++) {
@@ -288,14 +288,14 @@ std::string generate_10lvl_rom(std::vector<std::string> choices) {
 		log("Successfully inserted level %d (took %f seconds)", i, timeDiff(this_start, clock()));
 	}
 	log("Inserted all level files (total %f seconds)", timeDiff(all_start, clock()));
-	log("Out rom size: %d ($%X)", rom.size(), rom.size());
+	log("Out rom size: %lu ($%lX)", rom.size(), rom.size());
 
 	return rom;
 }
 
 std::string generate_1lvl_rom(std::string id) {
 	std::string rom = readfile("smw_maker_base_1lvl.smc", std::ios::binary, 512);
-	log("loaded base rom, size: %d ($%X)", rom.size(), rom.size());
+	log("loaded base rom, size: %lu ($%lX)", rom.size(), rom.size());
 
 	clock_t start_t = clock();
 	char main_mwl_name[256];
@@ -311,6 +311,6 @@ std::string generate_1lvl_rom(std::string id) {
 		rom = insert_lvl_and_sub(1, rom, main_mwl, false, nullptr);
 	}
 	log("Sucessfully inserted 1 lvl (%f seconds)", timeDiff(start_t, clock()));
-	log("Out rom size: %d ($%X)", rom.size(), rom.size());
+	log("Out rom size: %lu ($%lX)", rom.size(), rom.size());
 	return rom;
 }

@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
 		}
 	}
 	else {
-		fprintf(stderr, "Error: invalid number of arguments\n", argv[0]);
+		fprintf(stderr, "Error: invalid number of arguments\n");
 		return 1;
 	}
 	log("Total: took %f seconds.", timeDiff(start_time, clock()));
