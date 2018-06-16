@@ -4,7 +4,6 @@
 #include <map>
 #include <string>
 #include <fstream>
-#include <algorithm>
 #include "gen_rom.h"
 #include "mwllib.h"
 #include "utils.h"

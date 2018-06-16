@@ -4,14 +4,7 @@
 #include "gen_rom.h"
 #include "asardll.h"
 #include "utils.h"
-#ifdef _WIN32
-#include <fcntl.h>
-#include <io.h>
-#define fileno _fileno
-#define isatty _isatty
-#else
 #include <unistd.h>
-#endif
 
 // thanks to:
 // Vitor Vilela and Alcaro for misc coding help
@@ -61,10 +54,6 @@ int main(int argc, char** argv) {
 	if(isatty(fileno(stdout))) {
 		fprintf(stderr, "Won't write binary garbage to terminal.\n");
 	} else {
-#ifdef _WIN32
-		// fucking windows... this should make stdout be binary not text
-		_setmode(fileno(stdout), O_BINARY);
-#endif
 		fwrite(rom.data(), 1, rom.size(), stdout);
 	}
 	return 0;
