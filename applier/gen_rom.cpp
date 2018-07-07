@@ -28,7 +28,7 @@ std::pair<std::map<int, int>, std::string> parse_secondary_exits(int lvlnum, MWL
 		int entr_id = entr['d'];
 		int t_id = entr_count + lvlnum*16;
 		out[entr_id] = t_id;
-		byte_c = entr['c'];
+		int byte_c = entr['c'];
 		byte_c = (byte_c&0xF7)|(lvlnum>0xFF ? 8 : 0); // fix the level number high byte
 		entr_count++;
 		char* buf = (char*)malloc(sizeof(secondary_entrace_template)+32);
