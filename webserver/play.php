@@ -77,11 +77,15 @@ unlink($output_name);
 unlink($newrom_name);
 if(!empty($_GET["id"]))
     file_put_contents("../levels/$_GET[id].bps", $out);
-header("Content-Type: application/octet-stream");
-header("Content-Disposition: attachment; filename=smwmaker.bps");
-echo $out;
-# $end_t = microtime(TRUE);
-# echo "Total time: ".number_format($end_t-$start_t,4)."<br>";
-# echo "Flips time: ".number_format($flips_end_t-$flips_start_t,4)."<br>";
-# echo "Applier time: ".number_format($mwlapplier_end_t-$mwlapplier_start_t,4)."<br>";
-# echo "Applier stderr:<pre>".$applier_stderr."</pre>";
+
+if(!empty($_GET["debug"])) {
+    $end_t = microtime(TRUE);
+    echo "Total time: ".number_format($end_t-$start_t,4)."<br>";
+    echo "Flips time: ".number_format($flips_end_t-$flips_start_t,4)."<br>";
+    echo "Applier time: ".number_format($mwlapplier_end_t-$mwlapplier_start_t,4)."<br>";
+    echo "Applier stderr:<pre>".$applier_stderr."</pre>";
+} else {
+    header("Content-Type: application/octet-stream");
+    header("Content-Disposition: attachment; filename=smwmaker.bps");
+    echo $out;
+}
