@@ -28,9 +28,11 @@ std::pair<std::map<int, int>, std::string> parse_secondary_exits(int lvlnum, MWL
 		int entr_id = entr['d'];
 		int t_id = entr_count + lvlnum*16;
 		out[entr_id] = t_id;
+		byte_c = entr['c'];
+		byte_c = (byte_c&0xF7)|(lvlnum>0xFF ? 8 : 0); // fix the level number high byte
 		entr_count++;
 		char* buf = (char*)malloc(sizeof(secondary_entrace_template)+32);
-		snprintf(buf, sizeof(secondary_entrace_template)+32, secondary_entrace_template, t_id, lvlnum&0xFF, entr['a'], entr['b'], entr['c']);
+		snprintf(buf, sizeof(secondary_entrace_template)+32, secondary_entrace_template, t_id, lvlnum&0xFF, entr['a'], entr['b'], byte_c);
 		patch += buf;
 	}
 	return std::make_pair(out, patch);
@@ -68,7 +70,7 @@ std::string replace_screen_exits(std::string layer1_data, std::map<int, int> exi
 		} else if(obj_num == 0x00 && obj_sett == 0x00) {
 			// normal screen exit
 			auto flags = bitdesc_to_values(layer1_data.c_str(), "----wush", i-2);
-			int dest = layer1_data[i];
+			int dest = (unsigned char)layer1_data[i];
 			i += 1;
 			if(!flags['s']) {
 				// normal level exit, just replace level number
