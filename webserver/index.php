@@ -26,25 +26,51 @@ session_start();
 <?php else: ?>
     <p><a href='login.php'>Log in</a></p>
 <?php endif; ?>
-    <a href="play.php">Play random selection of 10 levels</a>
+    <?php if (isset($_GET["show_waiting"])): ?>
+      <a href="play.php?unverified">Play random selection of 10 levels (including unmoderated ones!)</a>
+    <?php else: ?>
+      <a href="play.php">Play random selection of 10 levels</a>
+    <?php endif; ?>
     <p>Browse levels: (click on the name to play)</p>
 <?php
 
-$get_display_level_data_query = "
-SELECT levels.id,
-       levels.name,
-       levels.difficulty,
-       users.name AS author,
-       users.smwc_id AS author_id,
-       AVG(rating) AS avg_rating,
-       COUNT(rating) AS rating_count
-  FROM levels
-       LEFT JOIN
-       ratings ON levels.id = ratings.levelId
-       LEFT JOIN
-       users ON levels.author = users.id
- GROUP BY levels.id;
-";
+if(isset($_GET["show_waiting"])) {
+  echo "<p><a href='index.php'>Hide unmoderated levels</a></p>";
+  $get_display_level_data_query = "
+  SELECT levels.id,
+         levels.name,
+         levels.difficulty,
+         levels.verified,
+         users.name AS author,
+         users.smwc_id AS author_id,
+         AVG(rating) AS avg_rating,
+         COUNT(rating) AS rating_count
+    FROM levels
+         LEFT JOIN
+         ratings ON levels.id = ratings.levelId
+         LEFT JOIN
+         users ON levels.author = users.id
+   GROUP BY levels.id;
+  ";
+} else {
+  echo "<p><a href='index.php?show_waiting'>Show unmoderated levels</a></p>";
+  $get_display_level_data_query = "
+  SELECT levels.id,
+         levels.name,
+         levels.difficulty,
+         users.name AS author,
+         users.smwc_id AS author_id,
+         AVG(rating) AS avg_rating,
+         COUNT(rating) AS rating_count
+    FROM levels
+         LEFT JOIN
+         ratings ON levels.id = ratings.levelId
+         LEFT JOIN
+         users ON levels.author = users.id
+      WHERE levels.verified = 1
+   GROUP BY levels.id;
+  ";
+}
 $difficulties = [
     "Easy",
     "Normal",
@@ -77,6 +103,12 @@ foreach($res as $row): ?>
           <input type="submit" name="rating" value="4">
           <input type="submit" name="rating" value="5">
       </form>
+    <?php endif; ?>
+    <?php if(isset($_GET["show_waiting"]) && is_admin() && $row["verified"] == 0): ?>
+      <a href="verify.php?id=<?= $row['id'] ?>&action=accept">Accept</a> | 
+      <a href="verify.php?id=<?= $row['id'] ?>&action=delete">Reject</a>
+    <?php elseif(is_admin()): ?>
+      <a href="verify.php?id=<?= $row['id'] ?>&action=delete">Delete</a>
     <?php endif; ?>
     </div>
 <?php endforeach; ?>

@@ -1,5 +1,7 @@
 <?php
 
+include 'common_includes.php';
+
 function path_join(...$parts) {
     return implode(DIRECTORY_SEPARATOR, $parts);
 }
@@ -11,17 +13,26 @@ $dirsep = DIRECTORY_SEPARATOR;
 if(empty($_GET["id"])) {
     # TODO: choose levels using intelligent algorithm (respecting average rating, difficulty, etc)
     # rn it's just random from all levels
-    $all_ids = [];
-    foreach(scandir(path_join($main_dir, 'levels')) as $name) {
-        if(substr($name, -9) === '_main.mwl') { # if name ends with _main.mwl
-            $id = str_replace("_main.mwl", '', $name);
-            array_push($all_ids, $id);
-        }
-    }
-    if(count($all_ids) === 0) {
+    # Would probably involve assigning each level a weight in the db query, then selecting by that weight
+    $mysqli = connect_db();
+    if(isset($_GET["unverified"]))
+        $query = "SELECT id FROM levels";
+    else
+        $query = "SELECT id FROM levels WHERE verified = 1";
+
+    $result = $mysqli->query($query);
+    if($result === FALSE)
+        die("MySQL error: ".htmlspecialchars($mysqli->error));
+
+    if($result->num_rows === 0) {
         echo "Error: no levels found";
         return;
     }
+
+    $all_ids = [];
+    foreach($result as $row)
+        array_push($all_ids, $row["id"]);
+
     while(count($all_ids) < 10) {
         $all_ids = array_merge($all_ids, $all_ids); // duplicate list
     }
@@ -78,7 +89,7 @@ unlink($newrom_name);
 if(!empty($_GET["id"]))
     file_put_contents("../levels/$_GET[id].bps", $out);
 
-if(!empty($_GET["debug"])) {
+if(isset($_GET["debug"])) {
     $end_t = microtime(TRUE);
     echo "Total time: ".number_format($end_t-$start_t,4)."<br>";
     echo "Flips time: ".number_format($flips_end_t-$flips_start_t,4)."<br>";

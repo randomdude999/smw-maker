@@ -66,7 +66,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 		}
 	}
 	if(NULL === sql_prepared_exec($mysqli,
-		"INSERT INTO levels (name, author, difficulty, verified) VALUES (?, ?, ?, 0)",
+		"INSERT INTO levels (name, author, difficulty) VALUES (?, ?, ?)",
 		"sii", $level_name, $_SESSION["user_id"], $difficulty))
 		die("MySQL error: ".htmlspecialchars($mysqli->error));
 	$id = $mysqli->insert_id;

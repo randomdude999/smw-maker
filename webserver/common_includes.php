@@ -22,6 +22,10 @@ function is_logged_in() {
 	return get($_SESSION["logged_in"], FALSE);
 }
 
+function is_admin() {
+    return get($_SESSION["is_admin"], FALSE);
+}
+
 function sql_prepared_exec($mysqli, $query, $types, ...$args) {
 	$stmt = $mysqli->prepare($query);
 	if($stmt === FALSE) return NULL;
