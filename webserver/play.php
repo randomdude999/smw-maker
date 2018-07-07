@@ -9,28 +9,28 @@ $main_dir = realpath('..');
 $dirsep = DIRECTORY_SEPARATOR;
 
 if(empty($_GET["id"])) {
-	# TODO: choose levels using intelligent algorithm (respecting average rating, difficulty, etc)
-	# rn it's just random from all levels
+    # TODO: choose levels using intelligent algorithm (respecting average rating, difficulty, etc)
+    # rn it's just random from all levels
     $all_ids = [];
     foreach(scandir(path_join($main_dir, 'levels')) as $name) {
-	    if(substr($name, -9) === '_main.mwl') { # if name ends with _main.mwl
-                $id = str_replace("_main.mwl", '', $name);
-	        array_push($all_ids, $id);
-	    }
+        if(substr($name, -9) === '_main.mwl') { # if name ends with _main.mwl
+            $id = str_replace("_main.mwl", '', $name);
+            array_push($all_ids, $id);
+        }
     }
     if(count($all_ids) === 0) {
-	    echo "Error: no levels found";
-	    return;
+        echo "Error: no levels found";
+        return;
     }
     while(count($all_ids) < 10) {
-	    $all_ids = array_merge($all_ids, $all_ids); // duplicate list
+        $all_ids = array_merge($all_ids, $all_ids); // duplicate list
     }
-
-    $lvlids = array_rand($all_ids, 10);
+    $lvlids = [];
+    // random keys -> random values
+    foreach(array_rand($all_ids, 10) as $a) {
+        array_push($lvlids, $all_ids[$a]);
+    }
     $cmd = path_join($main_dir, 'applier', 'MWLApplier')." ".join(" ", $lvlids);
-    var_dump($cmd);
-    var_dump($all_ids);
-    var_dump($lvlids);
 } else {
     if(!ctype_digit($_GET["id"]) || !file_exists("../levels/$_GET[id]_main.mwl")) {
         die("Level doesn't exist");
