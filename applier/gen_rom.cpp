@@ -69,7 +69,7 @@ std::string replace_screen_exits(std::string layer1_data, std::map<int, int> exi
 			new_data += target;
 		} else if(obj_num == 0x00 && obj_sett == 0x00) {
 			// normal screen exit
-			auto flags = bitdesc_to_values(layer1_data.c_str(), "----wush", i-2);
+			auto flags = bitdesc_to_values(obj_data.c_str(), "----wush", 1);
 			int dest = (unsigned char)layer1_data[i];
 			i += 1;
 			if(!flags['s']) {
