@@ -1,7 +1,14 @@
-#pragma once
+#ifndef ASAR_DLL_H_INCLUDED
+#	define ASAR_DLL_H_INCLUDED
+
+
+// RPG Hacker: Holy poopy; this is hacky.
+// All just for the convenience of not having to copy-paste
+// function prototypes into asardll.c, all while keeping
+// everything warning-free in clang...
 #ifndef asarfunc
+
 #define asarfunc extern
-#endif
 
 #define expectedapiversion 303
 
@@ -55,7 +62,7 @@ struct warnsetting {
 
 struct memoryfile {
 	const char* path;
-	void* buffer; // why does this have to be mutable?
+	const void* buffer;
 	size_t length;
 };
 
@@ -100,7 +107,14 @@ struct patchparams
 	// List of memory files to create on the virtual filesystem.
 	const struct memoryfile * memory_files;
 	int memory_file_count;
+
+	// Set override_checksum_gen to true and generate_checksum to true/false
+	// to force generating/not generating a checksum.
+	bool override_checksum_gen;
+	bool generate_checksum;
 };
+
+#endif
 
 
 #ifdef __cplusplus
@@ -195,7 +209,8 @@ asarfunc enum mappertype (*asar_getmapper)(void);
 // Generates the contents of a symbols file for in a specific format.
 asarfunc const char * (*asar_getsymbolsfile)(const char * format);
 
-
 #ifdef __cplusplus
 	}
 #endif
+
+#endif		// ASAR_DLL_H_INCLUDED

@@ -1,1 +1,5 @@
-Requires custom build of asar (clone f069cb0 from RPGHacker/asar and merge MemoryFile from Horrowind/asar into there, then remove add_virtual_file and use the patchparams struct for that. Way too confusing, just use the included asar.dll, it should work)
+Building:
+
+$ make
+
+Needs asar 1.60 dll at the parent directory
