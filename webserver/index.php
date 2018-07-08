@@ -112,5 +112,6 @@ foreach($res as $row): ?>
     <?php endif; ?>
     </div>
 <?php endforeach; ?>
+  <p><a href="thanks.html">Credits</a></p>
 </body>
 </html>
