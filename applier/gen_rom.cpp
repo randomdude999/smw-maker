@@ -208,12 +208,12 @@ std::string insert_lvl_and_sub(int startnum, std::string romdata, MWLFile& mwl, 
 	auto asdf = parse_secondary_exits(startnum, mwl);
 	std::map<int, int> secondary_entr_map = asdf.first;
 	std::string secondary_entr_patch = asdf.second;
-	int main_src = get_little_endian_word((unsigned char*)mwl.get_section(MWLSection::level).c_str());
+	int main_src = get_little_endian_word((const unsigned char*)mwl.get_section(MWLSection::level).c_str());
 	if(has_sub) {
 		auto asdf2 = parse_secondary_exits(startnum+10, *submwl);
 		secondary_entr_map.insert(asdf2.first.begin(), asdf2.first.end());
 		secondary_entr_patch += asdf2.second;
-		int sub_src = get_little_endian_word((unsigned char*)submwl->get_section(MWLSection::level).c_str());
+		int sub_src = get_little_endian_word((const unsigned char*)submwl->get_section(MWLSection::level).c_str());
 		std::map<int, int> levelnum_map = {
 			{ main_src, startnum },
 			{ sub_src, startnum+10 }

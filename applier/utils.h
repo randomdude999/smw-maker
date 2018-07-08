@@ -16,8 +16,8 @@ float timeDiff(clock_t start, clock_t end);
 
 inline int snestopc(int addr) { return ((addr&0x7F0000)>>1|(addr&0x7FFF)); }
 inline int pctosnes(int addr) { return ((addr<<1)&0x7F0000)|(addr&0x7FFF)|0x8000; }
-inline uint32_t get_little_endian_int(const char* data) { return data[0] + (data[1]<<8) + (data[2]<<16) + (data[3]<<24); }
-inline uint16_t get_little_endian_word(const char* data) { return data[0] + (data[1]<<8); }
+inline uint32_t get_little_endian_int(const unsigned char* data) { return ((uint32_t)data[0]) + ((uint32_t)data[1]<<8) + ((uint32_t)data[2]<<16) + ((uint32_t)data[3]<<24); }
+inline uint16_t get_little_endian_word(const unsigned char* data) { return ((uint16_t)data[0]) + ((uint16_t)data[1]<<8); }
 
 template<class BidiIter>
 BidiIter random_unique(BidiIter begin, BidiIter end, size_t num_random) {

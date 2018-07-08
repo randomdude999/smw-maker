@@ -13,10 +13,6 @@ MWLFile::MWLFile(char* fname) {
 	mwldata = readfile(fname, std::ios::binary, 0);
 }
 
-uint32_t get_little_endian_int(const unsigned char* data) {
-	return (uint32_t)data[0] + ((uint32_t)data[1]<<8) + ((uint32_t)data[2]<<16) + ((uint32_t)data[3]<<24);
-}
-
 std::vector<std::pair<uint32_t, uint32_t>> MWLFile::get_pointer_indexes() {
 	std::vector<std::pair<uint32_t, uint32_t>> out;
 	const char* data = mwldata.c_str();
