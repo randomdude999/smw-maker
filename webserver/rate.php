@@ -29,6 +29,6 @@ if($author === $_SESSION['user_id'])
 	die("Can't rate your own levels!");
 if(NULL === sql_prepared_exec($mysqli,
 	"INSERT INTO ratings (levelId, userId, rating) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE rating=?",
-	"iiii", $lvlid, $author, $rating, $rating))
+	"iiii", $lvlid, $_SESSION['user_id'], $rating, $rating))
 	die("MySQL error: ".htmlspecialchars($mysqli->error));
 redirect("index.php");
