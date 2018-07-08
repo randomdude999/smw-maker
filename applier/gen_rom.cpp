@@ -71,6 +71,7 @@ std::string replace_screen_exits(std::string layer1_data, std::map<int, int> exi
 			// normal screen exit
 			auto flags = bitdesc_to_values(obj_data.c_str(), "----wush", 1);
 			int dest = (unsigned char)layer1_data[i];
+			if(flags['h']) dest += 0x100;
 			i += 1;
 			if(!flags['s']) {
 				// normal level exit, just replace level number
@@ -81,7 +82,7 @@ std::string replace_screen_exits(std::string layer1_data, std::map<int, int> exi
 				new_data += target&0xFF;
 			} else {
 				// secondary exit
-				int target = exits_map[dest];
+				int target = exits_map.at(dest);
 				if(target > 0xFF) {
 					new_data += obj_data[0];
 					new_data += obj_data[1]|1; // force set the `h` in `wush`
