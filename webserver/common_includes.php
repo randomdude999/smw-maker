@@ -23,7 +23,7 @@ function is_logged_in() {
 }
 
 function is_admin() {
-    return get($_SESSION["is_admin"], FALSE);
+    return is_logged_in() && get($_SESSION["is_admin"], FALSE);
 }
 
 function sql_prepared_exec($mysqli, $query, $types, ...$args) {
