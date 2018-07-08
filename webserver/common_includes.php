@@ -1,6 +1,7 @@
 <?php
+include 'instance_specific.php';
 function connect_db() {
-    $conn = @new mysqli("localhost", "root", null, "smwmaker");
+    $conn = @new mysqli("localhost", mysql_username, mysql_password, "smwmaker");
     if($conn->connect_error) {
         echo "Error: could not connect to mysql ($conn->connect_errno: $conn->connect_error)";
         exit();
