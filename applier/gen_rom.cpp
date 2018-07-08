@@ -74,8 +74,11 @@ std::string replace_screen_exits(std::string layer1_data, std::map<int, int> exi
 			i += 1;
 			if(!flags['s']) {
 				// normal level exit, just replace level number
-				new_data += obj_data;
-				new_data += levels_map.at(dest);
+				int target = levels_map.at(dest);
+				new_data += obj_data[0];
+				new_data += (obj_data[1] & 0x0E) | (target>0xFF?1:0);
+				new_data += obj_data[2];
+				new_data += target&0xFF;
 			} else {
 				// secondary exit
 				int target = exits_map[dest];
