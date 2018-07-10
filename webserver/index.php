@@ -108,10 +108,10 @@ foreach($res as $row): ?>
       </form>
     <?php endif; ?>
     <?php if(isset($_GET["show_waiting"]) && is_admin() && $row["verified"] == 0): ?>
-      <a href="verify.php?id=<?= $row['id'] ?>&action=accept">Accept</a> | 
-      <a href="verify.php?id=<?= $row['id'] ?>&action=delete">Reject</a>
+      <a href="moderate.php?id=<?= $row['id'] ?>&action=accept">Accept</a> |
+      <a href="moderate.php?id=<?= $row['id'] ?>&action=delete">Reject</a>
     <?php elseif(is_admin()): ?>
-      <a href="verify.php?id=<?= $row['id'] ?>&action=delete">Delete</a>
+      <a href="moderate.php?id=<?= $row['id'] ?>&action=delete">Delete</a>
     <?php endif; ?>
     </div>
 <?php endforeach; ?>

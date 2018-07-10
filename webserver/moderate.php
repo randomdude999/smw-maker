@@ -20,10 +20,21 @@ if($act === "accept") {
 		die("MySQL error: ".htmlspecialchars($mysqli->error));
 	}
 	redirect("index.php");
-}
-if($act === "delete") {
+} elseif($act === "delete") {
 	if(NULL === sql_prepared_exec($mysqli, "DELETE FROM levels WHERE id = ?", "i", intval($_GET["id"]))) {
 		die("MySQL error: ".htmlspecialchars($mysqli->error));
 	}
 	redirect("index.php");
+} elseif($act === "ban") {
+	if(NULL === sql_prepared_exec($mysqli, "UPDATE users SET banned = 1 WHERE id = ?", "i", intval($_GET["id"]))) {
+		die("MySQL error: ".htmlspecialchars($mysqli->error));
+	}
+	redirect("userlist.php");
+} elseif($act === "unban") {
+	if(NULL === sql_prepared_exec($mysqli, "UPDATE users SET banned = 0 WHERE id = ?", "i", intval($_GET["id"]))) {
+		die("MySQL error: ".htmlspecialchars($mysqli->error));
+	}
+	redirect("userlist.php");
+} else {
+	die("Invalid action");
 }
