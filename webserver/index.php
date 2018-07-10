@@ -19,12 +19,13 @@ session_start();
 </head>
 <body>
     <p>So this is a thing i made. Basically kinda like mario maker except in SMW.</p>
+    <p>Usage: Create a level in Lunar Magic (may have one sublevel too), then register and upload it.</p>
 <?php if (is_logged_in()): ?>
     <p>Logged in as <a href='https://smwc.me/u/<?= htmlspecialchars($_SESSION["smwc_id"]) ?>'><?= htmlspecialchars($_SESSION["username"]) ?></a></p>
     <form action='logout.php' method='POST'><input type='submit' value='Log out'></form>
     <p><a href='upload.php'>Upload level</a></p>
 <?php else: ?>
-    <p><a href='login.php'>Log in</a></p>
+    <p><a href='login.php'>Log in / register</a></p>
 <?php endif; ?>
     <?php if (isset($_GET["show_waiting"])): ?>
       <a href="play.php?unverified">Play random selection of 10 levels (including unmoderated ones!)</a>
