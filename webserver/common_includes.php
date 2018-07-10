@@ -34,3 +34,15 @@ function sql_prepared_exec($mysqli, $query, $types, ...$args) {
 	if(!$stmt->execute()) return NULL;
 	return $stmt->get_result();
 }
+
+function get_predicates($mysqli) {
+    $escape = function($str) use ($mysqli) {
+        return "'" . $mysqli->real_escape_string($str) . "'";
+    };
+    $predicates = "TRUE";
+    if (!isset($_GET["show_waiting"])) $predicates .= " AND levels.verified = 1";
+    if (!empty($_GET["difficulties"]) && is_array($_GET["difficulties"])) {
+        $predicates .= " AND levels.difficulty IN (" . implode(",", array_map($escape, array_keys($_GET["difficulties"]))) . ")";
+    }
+    return $predicates;
+}
