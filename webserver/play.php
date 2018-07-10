@@ -41,6 +41,7 @@ if(empty($_GET["id"])) {
     foreach(array_rand($all_ids, 10) as $a) {
         array_push($lvlids, $all_ids[$a]);
     }
+    shuffle($lvlids); // for some reason array_rand doesn't do this
     $cmd = path_join($main_dir, 'applier', 'MWLApplier')." ".join(" ", $lvlids);
 } else {
     if(!ctype_digit($_GET["id"]) || !file_exists("../levels/$_GET[id]_main.mwl")) {
