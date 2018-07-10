@@ -15,7 +15,6 @@ autoclean dl layer2
 
 org $05EC00+(!lvlnum*2)
 ; sprite word
-autoclean sprite
 dw sprite
 
 org $0EF100+!lvlnum
@@ -34,6 +33,12 @@ org $05DE00+!lvlnum
 incbin "secondary.bin":4-5
 org $0EF310+!lvlnum
 incbin "secondary.bin":5-6
+org read3(read3($05D9E4)+$0A)+$000+!lvlnum
+incbin "secondary.bin":6-7
+org read3(read3($05D9E4)+$0A)+$200+!lvlnum
+incbin "secondary.bin":7-8
+org read3(read3($05D9E4)+$0A)+$400+!lvlnum
+incbin "secondary.bin":8-9
 
 freedata
 layer1:

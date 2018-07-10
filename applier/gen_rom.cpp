@@ -141,7 +141,7 @@ std::string replace_screen_exits(std::string layer1_data, std::map<int, int> exi
 std::string insert_mwl(int lvlnum, MWLFile& mwl, std::string rom, std::map<int,int> secondary_entr_map, std::map<int, int> levelnum_map) {
 	log("insert_mwl %x", lvlnum);
 	std::string new_l1_data = replace_screen_exits(mwl.get_section(MWLSection::layer1).substr(8), secondary_entr_map, levelnum_map);
-	std::string leveldat = mwl.get_section(MWLSection::level).substr(2, 5) + mwl.get_section(MWLSection::layer2)[0];
+	std::string leveldat = mwl.get_section(MWLSection::level).substr(2, 5) + mwl.get_section(MWLSection::layer2)[0] + mwl.get_section(MWLSection::level).substr(9, 3);
 	std::string l2_data;
 	log("Layer2 first byte: %x", mwl.get_section(MWLSection::layer2)[0]);
 	if(mwl.get_section(MWLSection::layer2)[0] != 0) { // i'm afraid this is a slight hack.
