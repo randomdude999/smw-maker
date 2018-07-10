@@ -51,7 +51,8 @@ if(isset($_GET["show_waiting"])) {
          ratings ON levels.id = ratings.levelId
          LEFT JOIN
          users ON levels.author = users.id
-   GROUP BY levels.id;
+   GROUP BY levels.id
+   ORDER BY levels.id DESC;
   ";
 } else {
   echo "<p><a href='index.php?show_waiting'>Show unmoderated levels</a></p>";
@@ -69,7 +70,8 @@ if(isset($_GET["show_waiting"])) {
          LEFT JOIN
          users ON levels.author = users.id
       WHERE levels.verified = 1
-   GROUP BY levels.id;
+   GROUP BY levels.id
+   ORDER BY levels.id DESC;
   ";
 }
 $difficulties = [
