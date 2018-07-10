@@ -113,6 +113,6 @@ foreach($res as $row): ?>
     <?php endif; ?>
     </div>
 <?php endforeach; ?>
-  <p><a href="thanks.html">Credits</a></p>
+  <p>Made by <a href="https://smwc.me/u/32552">randomdude999</a> - <a href="https://github.com/randomdude999/smw-maker">Source code</a> - <a href="thanks.html">Credits</a></p>
 </body>
 </html>
