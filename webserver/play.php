@@ -15,10 +15,7 @@ if(empty($_GET["id"])) {
     # rn it's just random from all levels
     # Would probably involve assigning each level a weight in the db query, then selecting by that weight
     $mysqli = connect_db();
-    if(isset($_GET["unverified"]))
-        $query = "SELECT id FROM levels";
-    else
-        $query = "SELECT id FROM levels WHERE verified = 1";
+    $query = "SELECT id FROM levels WHERE " . get_predicates($mysqli);
 
     $result = $mysqli->query($query);
     if($result === FALSE)

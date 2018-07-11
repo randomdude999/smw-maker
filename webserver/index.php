@@ -2,6 +2,13 @@
 include 'common_includes.php';
 $mysqli = connect_db();
 session_start();
+
+$difficulties = [
+    "Easy",
+    "Normal",
+    "Hard",
+    "Kaizo"
+];
 ?>
 <!DOCTYPE html>
 <html>
@@ -27,59 +34,48 @@ session_start();
 <?php else: ?>
     <p><a href='login.php'>Log in / register</a></p>
 <?php endif; ?>
+    <a href="play.php?<?= htmlspecialchars(http_build_query($_GET)) ?>">Play random selection of 10 levels
     <?php if (isset($_GET["show_waiting"])): ?>
-      <a href="play.php?unverified">Play random selection of 10 levels (including unmoderated ones!)</a>
-    <?php else: ?>
-      <a href="play.php">Play random selection of 10 levels</a>
+        (including unmoderated ones!)
     <?php endif; ?>
+    </a>
+    <form method="GET" action="?">
+        <label><input type=checkbox name=show_waiting
+            <?php if (isset($_GET['show_waiting'])) echo "checked"; ?>
+        > Show unmoderated</label><br>
+        Difficulties:
+        <?php foreach($difficulties as $i => $difficulty): ?>
+            <label>
+                <input type=checkbox name="difficulties[<?= htmlspecialchars($i) ?>]"
+                    <?php if (isset($_GET['difficulties'][$i])) echo "checked"; ?>
+                >
+                <?= htmlspecialchars($difficulty) ?>
+            </label>
+        <?php endforeach; ?>
+        <br>
+        <input type=submit value=Filter>
+    </form>
     <p>Browse levels: (click on the name to play)</p>
 <?php
 
-if(isset($_GET["show_waiting"])) {
-  echo "<p><a href='index.php'>Hide unmoderated levels</a></p>";
-  $get_display_level_data_query = "
-  SELECT levels.id,
-         levels.name,
-         levels.difficulty,
-         levels.verified,
-         users.name AS author,
-         users.smwc_id AS author_id,
-         AVG(rating) AS avg_rating,
-         COUNT(rating) AS rating_count
-    FROM levels
-         LEFT JOIN
-         ratings ON levels.id = ratings.levelId
-         LEFT JOIN
-         users ON levels.author = users.id
-   GROUP BY levels.id
-   ORDER BY levels.id DESC;
-  ";
-} else {
-  echo "<p><a href='index.php?show_waiting'>Show unmoderated levels</a></p>";
-  $get_display_level_data_query = "
-  SELECT levels.id,
-         levels.name,
-         levels.difficulty,
-         users.name AS author,
-         users.smwc_id AS author_id,
-         AVG(rating) AS avg_rating,
-         COUNT(rating) AS rating_count
-    FROM levels
-         LEFT JOIN
-         ratings ON levels.id = ratings.levelId
-         LEFT JOIN
-         users ON levels.author = users.id
-      WHERE levels.verified = 1
-   GROUP BY levels.id
-   ORDER BY levels.id DESC;
-  ";
-}
-$difficulties = [
-    "Easy",
-    "Normal",
-    "Hard",
-    "Kaizo"
-];
+$predicates = get_predicates($mysqli);
+$get_display_level_data_query = <<<SQL
+SELECT levels.id,
+        levels.name,
+        levels.difficulty,
+        users.name AS author,
+        users.smwc_id AS author_id,
+        AVG(rating) AS avg_rating,
+        COUNT(rating) AS rating_count
+FROM levels
+        LEFT JOIN
+        ratings ON levels.id = ratings.levelId
+        LEFT JOIN
+        users ON levels.author = users.id
+    WHERE $predicates
+GROUP BY levels.id
+ORDER BY levels.id DESC;
+SQL;
 
 $res = $mysqli->query($get_display_level_data_query);
 if(!$res) {
