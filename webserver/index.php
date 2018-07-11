@@ -63,6 +63,7 @@ $get_display_level_data_query = <<<SQL
 SELECT levels.id,
         levels.name,
         levels.difficulty,
+        levels.verified,
         users.name AS author,
         users.smwc_id AS author_id,
         AVG(rating) AS avg_rating,
@@ -103,7 +104,7 @@ foreach($res as $row): ?>
           <input type="submit" name="rating" value="5">
       </form>
     <?php endif; ?>
-    <?php if(isset($_GET["show_waiting"]) && is_admin() && $row["verified"] == 0): ?>
+    <?php if(is_admin() && $row["verified"] == 0): ?>
       <a href="moderate.php?id=<?= $row['id'] ?>&action=accept">Accept</a> |
       <a href="moderate.php?id=<?= $row['id'] ?>&action=delete">Reject</a>
     <?php elseif(is_admin()): ?>
