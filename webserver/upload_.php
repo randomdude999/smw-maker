@@ -71,7 +71,11 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 		die("MySQL error: ".htmlspecialchars($mysqli->error));
 	$id = $mysqli->insert_id;
 	rename($_FILES["mainfile"]["tmp_name"], "../levels/${id}_main.mwl");
-	if($hassub) rename($_FILES["subfile"]["tmp_name"], "../levels/${id}_sub.mwl");
+	chmod("../levels/${id}_main.mwl", 0644);
+	if($hassub) {
+		rename($_FILES["subfile"]["tmp_name"], "../levels/${id}_sub.mwl");
+		chmod("../levels/${id}_sub.mwl", 0644);
+	}
 	redirect("index.php");
 } else {
 	redirect("upload.php");
