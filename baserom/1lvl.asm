@@ -50,12 +50,14 @@ org $05D83E
     BNE .Init
     LDA $13BF|!addr
     BNE +
-    INC A
+    autoclean JSL InitDeaths
+    LDA #$01
     STA $13BF|!addr
     +
     JMP.w LoadEnd
 
     .Init
+    JSL InitDeaths ; is this line needed?
     STZ $13BF|!addr
     LDA $0109|!addr
     JMP.w LoadEnd3
@@ -82,3 +84,13 @@ LoadEnd2:
 
 org $0080E3 ; Fixes music not playing in first room
     JML FixMusic
+
+freecode
+InitDeaths:
+LDA #$00
+STA !deathcounter+0
+STA !deathcounter+1
+STA !deathcounter+2
+STA !deathcounter+3
+STA !deathcounter+4
+RTL
