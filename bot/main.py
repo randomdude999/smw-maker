@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 bs = lambda text: BeautifulSoup(text, "html.parser")
 
 smwc_endpoint = "https://www.smwcentral.net/"
-pm_template = """Your SMW Maker token is {}. Go to [url]...[/url] to log in now.
+pm_template = """Your SMW Maker token is {}. Go to [url]{}[/url] to log in now.
 If you need a new token, just PM me again. That will also invalidate the previous token.
 """
 
@@ -19,11 +19,11 @@ def smwc_request(url, data=None):
     else:
         return requests.post(smwc_endpoint+url, data=data, cookies={"smwc_session":sess_token})
 
-def login(auth_data):
+def login():
     payload = {
         "login": "Login",
-        "username": auth_data["uname"],
-        "password": auth_data["pass"]
+        "username": auth_data["smwc_user"],
+        "password": auth_data["smwc_password"]
     }
     with requests.post(smwc_endpoint+"?p=login", data=payload) as r:
         soup = bs(r.text)
@@ -74,7 +74,7 @@ def handle_user(uname, uid):
         token = secrets.token_hex(16)
     cur.execute("INSERT INTO users (smwc_id, name, token) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE name=%s, token=%s", (uid, uname, token, uname, token))
     conn.commit()
-    send_pm(uname, "Re: smwmaker verify", pm_template.format(token))
+    send_pm(uname, "Re: smwmaker verify", pm_template.format(token, auth_data["login_page_url"]))
 
 def handle_pm(table_row):
     # handle incoming PM (table_row is the <tr> element of the PM in the PM list)
@@ -116,10 +116,15 @@ def check_smwc():
 def main():
     global sess_token # needs to be global since we might need to generate a new one sometimes
     global conn
-    with open("randombot_credentials.json") as f:
+    global auth_data
+    with open("../config.json") as f:
         auth_data = json.load(f)
-    conn = MySQLdb.connect(host="localhost", user="root", db="smwmaker") # , passwd=None
-    sess_token = login(auth_data)
+    if auth_data["mysql_password"] != None:
+        conn = MySQLdb.connect(host="localhost", user=auth_data["mysql_user"],
+                               db="smwmaker", passwd=auth_data["mysql_password"])
+    else:
+        conn = MySQLdb.connect(host="localhost", user=auth_data["mysql_user"], db="smwmaker")
+    sess_token = login()
     try:
         while True:
             check_smwc()

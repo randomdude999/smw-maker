@@ -32,5 +32,4 @@ __pycache__/
 *.py[co]
 
 # misc
-randombot_credentials.json
-/webserver/instance_specific.php
+/config.json

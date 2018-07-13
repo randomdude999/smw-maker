@@ -1,7 +1,8 @@
 <?php
-include 'instance_specific.php';
+$config = json_decode(file_get_contents("../config.json"), TRUE);
 function connect_db() {
-    $conn = @new mysqli("localhost", mysql_username, mysql_password, "smwmaker");
+    global $config;
+    $conn = @new mysqli("localhost", $config["mysql_user"], $config["mysql_password"], "smwmaker");
     if($conn->connect_error) {
         echo "Error: could not connect to mysql ($conn->connect_errno: $conn->connect_error)";
         exit();
