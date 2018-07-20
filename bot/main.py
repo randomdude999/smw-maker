@@ -13,6 +13,8 @@ pm_template = """Your SMW Maker token is {}. Go to [url]{}[/url] to log in now.
 If you need a new token, just PM me again. That will also invalidate the previous token.
 """
 
+sess_token = None
+
 def smwc_request(url, data=None):
     if data is None:
         return requests.get(smwc_endpoint+url, cookies={"smwc_session":sess_token})
@@ -20,6 +22,7 @@ def smwc_request(url, data=None):
         return requests.post(smwc_endpoint+url, data=data, cookies={"smwc_session":sess_token})
 
 def login():
+    global sess_token
     payload = {
         "login": "Login",
         "username": auth_data["smwc_user"],
@@ -29,7 +32,7 @@ def login():
         soup = bs(r.text)
         # TODO: detect that we are indeed logged in
         sess_token = r.cookies["smwc_session"]
-    return sess_token
+        smwc_request("ajax.php?a=hide&h=1") # hide from online list
 
 
 def logout():
@@ -91,7 +94,6 @@ def handle_pm(table_row):
     handle_user(uname, u_id)
 
 def check_smwc():
-    global sess_token
     # using a while loop here is hacky but it's the best alternative to a goto (which doesn't even exist in python :( )
     while True:
         with smwc_request("?p=pm") as r:
@@ -110,11 +112,10 @@ def check_smwc():
                             pass
                 break # exit
             else:
-                sess_token = login()
+                login()
                 continue # go to the request again
 
 def main():
-    global sess_token # needs to be global since we might need to generate a new one sometimes
     global conn
     global auth_data
     with open("../config.json") as f:
@@ -124,7 +125,7 @@ def main():
                                db="smwmaker", passwd=auth_data["mysql_password"])
     else:
         conn = MySQLdb.connect(host="localhost", user=auth_data["mysql_user"], db="smwmaker")
-    sess_token = login()
+    login()
     try:
         while True:
             check_smwc()
