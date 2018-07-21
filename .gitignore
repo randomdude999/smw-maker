@@ -30,6 +30,9 @@ asar-standalone
 # Python stuff
 __pycache__/
 *.py[co]
+/bot/output.log
+/bot/error.log
+/bot/venv/
 
 # misc
 /config.json
