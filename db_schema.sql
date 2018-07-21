@@ -25,3 +25,11 @@ CREATE TABLE ratings (
   # only 1 vote per user per level
   CONSTRAINT UNIQUE (levelId, userId)
 );
+CREATE TABLE moderation_log (
+  subject VARCHAR(255) NOT NULL, # name of level (or maybe user)
+  userId INTEGER NOT NULL, # ID of moderator who did this
+  action ENUM("accept", "reject", "delete") NOT NULL,
+  comment TEXT,
+  when_happened TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (userId) REFERENCES users (id)
+);

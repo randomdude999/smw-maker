@@ -106,12 +106,13 @@ foreach($res as $row): ?>
     <?php endif; ?>
     <?php if(is_admin() && $row["verified"] == 0): ?>
       <a href="moderate.php?id=<?= $row['id'] ?>&action=accept">Accept</a> |
-      <a href="moderate.php?id=<?= $row['id'] ?>&action=delete">Reject</a>
+      <a href="moderate.php?id=<?= $row['id'] ?>&action=reject">Reject</a>
     <?php elseif(is_admin()): ?>
       <a href="moderate.php?id=<?= $row['id'] ?>&action=delete">Delete</a>
     <?php endif; ?>
     </div>
 <?php endforeach; ?>
+  <p><a href="moderation_log.php">Moderation log</a></p>
   <p>Made by <a href="https://smwc.me/u/32552">randomdude999</a> - <a href="https://github.com/randomdude999/smw-maker">Source code</a> - <a href="thanks.html">Credits</a></p>
 </body>
 </html>
