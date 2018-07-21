@@ -31,7 +31,10 @@ def login():
     with requests.post(smwc_endpoint+"?p=login", data=payload) as r:
         soup = bs(r.text)
         # TODO: detect that we are indeed logged in
-        sess_token = r.cookies["smwc_session"]
+        try:
+            sess_token = r.cookies["smwc_session"]
+        except KeyError: # cookie not set
+            return
         smwc_request("ajax.php?a=hide&h=1") # hide from online list
 
 
@@ -112,6 +115,7 @@ def check_smwc():
                             pass
                 break # exit
             else:
+                time.sleep(10) # wait 10 seconds before retry
                 login()
                 continue # go to the request again
 
