@@ -34,11 +34,7 @@ $difficulties = [
 <?php else: ?>
     <p><a href='login.php'>Log in / register</a></p>
 <?php endif; ?>
-    <a href="play.php?<?= htmlspecialchars(http_build_query($_GET)) ?>">Play random selection of 10 levels
-    <?php if (isset($_GET["show_waiting"])): ?>
-        (including unmoderated ones!)
-    <?php endif; ?>
-    </a>
+    <a href="play.php?<?= htmlspecialchars(http_build_query($_GET)) ?>">Play random selection of 10 currently visible levels</a>
     <form method="GET" action="?">
         <label><input type=checkbox name=show_waiting
             <?php if (isset($_GET['show_waiting'])) echo "checked"; ?>
@@ -92,7 +88,7 @@ foreach($res as $row): ?>
     Created by <a href="https://smwc.me/u/<?= $row['author_id'] ?>"><?= htmlspecialchars($row['author']) ?></a><br>
     Difficulty: <?= $difficulties[$row["difficulty"]] ?>
     <?php if($row["avg_rating"]!==NULL): ?>
-        <br>Rating: <?= number_format($row["avg_rating"],1) ?>/5
+        <br>Rating: <?= number_format($row["avg_rating"],1) ?>/5 (<?= $row["rating_count"] ?>)
     <?php endif; ?>
     <?php if(is_logged_in()): ?>
       <br><form action="rate.php" method="POST">Rate:
